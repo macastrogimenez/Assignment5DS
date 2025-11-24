@@ -100,11 +100,11 @@ func (c *Client) Bid(bidderID string, amount int32) {
 
 	switch resp.Outcome {
 	case pb.BidResponse_SUCCESS:
-		fmt.Printf("✓ Success: %s\n", resp.Message)
+		fmt.Printf("Success: %s\n", resp.Message)
 	case pb.BidResponse_FAIL:
-		fmt.Printf("✗ Fail: %s\n", resp.Message)
+		fmt.Printf("Fail: %s\n", resp.Message)
 	case pb.BidResponse_EXCEPTION:
-		fmt.Printf("⚠ Exception: %s\n", resp.Message)
+		fmt.Printf("Exception: %s\n", resp.Message)
 	}
 }
 

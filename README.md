@@ -22,6 +22,7 @@ The system consists of:
 ### Node Components
 
 Each node maintains:
+
 - Auction state (bids, highest bidder, auction timer)
 - Peer connections for replication
 - Leader election mechanism
@@ -36,6 +37,7 @@ Each node maintains:
 ## Installation
 
 1. Install Protocol Buffers compiler:
+
 ```bash
 # macOS
 brew install protobuf
@@ -46,6 +48,7 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 ```
 
 2. Generate protobuf files and install dependencies:
+
 ```bash
 make proto
 go mod tidy
@@ -56,21 +59,25 @@ go mod tidy
 ### Option 1: Using Makefile (Recommended)
 
 **Terminal 1 - Start Node 1:**
+
 ```bash
 make run-node1
 ```
 
 **Terminal 2 - Start Node 2:**
+
 ```bash
 make run-node2
 ```
 
 **Terminal 3 - Start Node 3:**
+
 ```bash
 make run-node3
 ```
 
 **Terminal 4 - Start Client:**
+
 ```bash
 make run-client
 ```
@@ -78,6 +85,7 @@ make run-client
 ### Option 2: Manual Execution
 
 **Start nodes manually:**
+
 ```bash
 # Terminal 1
 go run node/main.go -id=1 -port=5001 -peers=localhost:5002,localhost:5003
@@ -90,6 +98,7 @@ go run node/main.go -id=3 -port=5003 -peers=localhost:5001,localhost:5002
 ```
 
 **Start client:**
+
 ```bash
 go run client/main.go -nodes=localhost:5001,localhost:5002,localhost:5003
 ```
@@ -98,7 +107,7 @@ go run client/main.go -nodes=localhost:5001,localhost:5002,localhost:5003
 
 The client provides an interactive command-line interface:
 
-```
+```bash
 > bid alice 100
 ✓ Success: Bid accepted: 100
 
@@ -127,6 +136,7 @@ Highest Bid: 150
 ### Client-to-Node API
 
 #### Bid
+
 - **Method**: `Bid`
 - **Input**: `amount` (int32), `bidder_id` (string)
 - **Output**: `outcome` (SUCCESS, FAIL, or EXCEPTION)
@@ -137,6 +147,7 @@ Highest Bid: 150
   - Returns EXCEPTION if auction is over
 
 #### Result
+
 - **Method**: `Result`
 - **Input**: void
 - **Output**: `outcome` (auction state)
@@ -155,6 +166,7 @@ To test the system's resilience to node failures:
 5. Query results - should still get consistent responses
 
 Example:
+
 ```bash
 # Start all nodes and client
 # In client:
@@ -204,7 +216,6 @@ Assignment5/
 │   └── main.go          # Node server implementation
 ├── client/
 │   └── main.go          # Client implementation
-└── test_scenario.sh     # Test script (optional)
 ```
 
 ## Implementation Details
@@ -230,17 +241,20 @@ Assignment5/
 
 ## Troubleshooting
 
-**Error: "Failed to connect to peer"**
+### Error: "Failed to connect to peer"
+
 - Ensure all nodes are started
 - Check port availability
 - Wait a few seconds for connections to establish
 
-**Error: "No available nodes"**
+### Error: "No available nodes"
+
 - At least one node must be running
 - Check network connectivity
 - Verify node addresses in client command
 
-**Error: "expected ';', found 'EOF'"**
+### Error: "expected ';', found 'EOF'"
+
 - Run `make proto` to generate protobuf files
 - Run `go mod tidy` to download dependencies
 

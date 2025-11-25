@@ -11,23 +11,6 @@ A distributed auction system implemented in Go using gRPC with replication to ha
 - **Time-based Auction**: Auction ends after 100 seconds
 - **State Replication**: All nodes maintain consistent auction state
 
-## Architecture
-
-The system consists of:
-
-1. **Nodes (Servers)**: Handle auction logic and maintain replicated state
-2. **Clients**: Connect to any available node to place bids or query results
-3. **Internal Replication**: Nodes replicate bid state to ensure consistency
-
-### Node Components
-
-Each node maintains:
-
-- Auction state (bids, highest bidder, auction timer)
-- Peer connections for replication
-- Leader election mechanism
-- Heartbeat system for failure detection
-
 ## Prerequisites
 
 - Go 1.21 or higher
@@ -223,7 +206,6 @@ Assignment5/
 ### Replication Strategy
 
 - **Primary-Backup**: Any node can accept writes and replicate to others
-- **Heartbeats**: Nodes send periodic heartbeats to detect failures
 - **State Sync**: Nodes can sync state from peers on startup or recovery
 
 ### Fault Tolerance
@@ -235,7 +217,6 @@ Assignment5/
 ### Time Constraints
 
 - Auction duration: 100 seconds
-- Heartbeat interval: 2 seconds
 - Leader timeout: 5 seconds
 - RPC timeout: 2-5 seconds
 
@@ -257,6 +238,47 @@ Assignment5/
 
 - Run `make proto` to generate protobuf files
 - Run `go mod tidy` to download dependencies
+
+### Error: "protoc-gen-go: program not found or is not executable" when running `make proto`
+
+Solution - Add Go's bin directory to your PATH:
+
+1. Find where Go installs binaries:
+
+```bash
+go env GOPATH
+```
+
+This typically returns something like go
+
+2. Add to your PATH permanently:
+
+For zsh (your shell), add this line to ~/.zshrc:
+
+```bash
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+3. Apply the change:
+
+```bash
+source ~/.zshrc
+```
+
+4. Verify the plugins are now accessible:
+
+```bash
+which protoc-gen-go
+which protoc-gen-go-grpc
+```
+
+Both should show paths like protoc-gen-go
+
+5. Now try again:
+
+```bash
+make proto
+```
 
 ## Building for Production
 

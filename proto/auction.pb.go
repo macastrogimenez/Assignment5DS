@@ -287,110 +287,6 @@ func (x *ResultResponse) GetMessage() string {
 }
 
 // Internal node-to-node messages
-type HeartbeatRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
-	Timestamp     int64                  `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HeartbeatRequest) Reset() {
-	*x = HeartbeatRequest{}
-	mi := &file_proto_auction_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HeartbeatRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HeartbeatRequest) ProtoMessage() {}
-
-func (x *HeartbeatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_auction_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HeartbeatRequest.ProtoReflect.Descriptor instead.
-func (*HeartbeatRequest) Descriptor() ([]byte, []int) {
-	return file_proto_auction_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *HeartbeatRequest) GetNodeId() int32 {
-	if x != nil {
-		return x.NodeId
-	}
-	return 0
-}
-
-func (x *HeartbeatRequest) GetTimestamp() int64 {
-	if x != nil {
-		return x.Timestamp
-	}
-	return 0
-}
-
-type HeartbeatResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	IsLeader      bool                   `protobuf:"varint,1,opt,name=is_leader,json=isLeader,proto3" json:"is_leader,omitempty"`
-	LeaderId      int32                  `protobuf:"varint,2,opt,name=leader_id,json=leaderId,proto3" json:"leader_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *HeartbeatResponse) Reset() {
-	*x = HeartbeatResponse{}
-	mi := &file_proto_auction_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *HeartbeatResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*HeartbeatResponse) ProtoMessage() {}
-
-func (x *HeartbeatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_auction_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use HeartbeatResponse.ProtoReflect.Descriptor instead.
-func (*HeartbeatResponse) Descriptor() ([]byte, []int) {
-	return file_proto_auction_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *HeartbeatResponse) GetIsLeader() bool {
-	if x != nil {
-		return x.IsLeader
-	}
-	return false
-}
-
-func (x *HeartbeatResponse) GetLeaderId() int32 {
-	if x != nil {
-		return x.LeaderId
-	}
-	return 0
-}
-
 type SyncStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
@@ -400,7 +296,7 @@ type SyncStateRequest struct {
 
 func (x *SyncStateRequest) Reset() {
 	*x = SyncStateRequest{}
-	mi := &file_proto_auction_proto_msgTypes[6]
+	mi := &file_proto_auction_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -412,7 +308,7 @@ func (x *SyncStateRequest) String() string {
 func (*SyncStateRequest) ProtoMessage() {}
 
 func (x *SyncStateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_auction_proto_msgTypes[6]
+	mi := &file_proto_auction_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -425,7 +321,7 @@ func (x *SyncStateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncStateRequest.ProtoReflect.Descriptor instead.
 func (*SyncStateRequest) Descriptor() ([]byte, []int) {
-	return file_proto_auction_proto_rawDescGZIP(), []int{6}
+	return file_proto_auction_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SyncStateRequest) GetNodeId() int32 {
@@ -447,7 +343,7 @@ type SyncStateResponse struct {
 
 func (x *SyncStateResponse) Reset() {
 	*x = SyncStateResponse{}
-	mi := &file_proto_auction_proto_msgTypes[7]
+	mi := &file_proto_auction_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -459,7 +355,7 @@ func (x *SyncStateResponse) String() string {
 func (*SyncStateResponse) ProtoMessage() {}
 
 func (x *SyncStateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_auction_proto_msgTypes[7]
+	mi := &file_proto_auction_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -472,7 +368,7 @@ func (x *SyncStateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncStateResponse.ProtoReflect.Descriptor instead.
 func (*SyncStateResponse) Descriptor() ([]byte, []int) {
-	return file_proto_auction_proto_rawDescGZIP(), []int{7}
+	return file_proto_auction_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SyncStateResponse) GetBids() map[string]int32 {
@@ -514,7 +410,7 @@ type ReplicateBidRequest struct {
 
 func (x *ReplicateBidRequest) Reset() {
 	*x = ReplicateBidRequest{}
-	mi := &file_proto_auction_proto_msgTypes[8]
+	mi := &file_proto_auction_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -526,7 +422,7 @@ func (x *ReplicateBidRequest) String() string {
 func (*ReplicateBidRequest) ProtoMessage() {}
 
 func (x *ReplicateBidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_auction_proto_msgTypes[8]
+	mi := &file_proto_auction_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -539,7 +435,7 @@ func (x *ReplicateBidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReplicateBidRequest.ProtoReflect.Descriptor instead.
 func (*ReplicateBidRequest) Descriptor() ([]byte, []int) {
-	return file_proto_auction_proto_rawDescGZIP(), []int{8}
+	return file_proto_auction_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReplicateBidRequest) GetBidderId() string {
@@ -572,7 +468,7 @@ type ReplicateBidResponse struct {
 
 func (x *ReplicateBidResponse) Reset() {
 	*x = ReplicateBidResponse{}
-	mi := &file_proto_auction_proto_msgTypes[9]
+	mi := &file_proto_auction_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -584,7 +480,7 @@ func (x *ReplicateBidResponse) String() string {
 func (*ReplicateBidResponse) ProtoMessage() {}
 
 func (x *ReplicateBidResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_auction_proto_msgTypes[9]
+	mi := &file_proto_auction_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -597,7 +493,7 @@ func (x *ReplicateBidResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReplicateBidResponse.ProtoReflect.Descriptor instead.
 func (*ReplicateBidResponse) Descriptor() ([]byte, []int) {
-	return file_proto_auction_proto_rawDescGZIP(), []int{9}
+	return file_proto_auction_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ReplicateBidResponse) GetSuccess() bool {
@@ -631,13 +527,7 @@ const file_proto_auction_proto_rawDesc = "" +
 	"winningBid\x12\x1f\n" +
 	"\vhighest_bid\x18\x04 \x01(\x05R\n" +
 	"highestBid\x12\x18\n" +
-	"\amessage\x18\x05 \x01(\tR\amessage\"I\n" +
-	"\x10HeartbeatRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\"M\n" +
-	"\x11HeartbeatResponse\x12\x1b\n" +
-	"\tis_leader\x18\x01 \x01(\bR\bisLeader\x12\x1b\n" +
-	"\tleader_id\x18\x02 \x01(\x05R\bleaderId\"+\n" +
+	"\amessage\x18\x05 \x01(\tR\amessage\"+\n" +
 	"\x10SyncStateRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\xed\x01\n" +
 	"\x11SyncStateResponse\x128\n" +
@@ -658,9 +548,8 @@ const file_proto_auction_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess2v\n" +
 	"\aAuction\x120\n" +
 	"\x03Bid\x12\x13.auction.BidRequest\x1a\x14.auction.BidResponse\x129\n" +
-	"\x06Result\x12\x16.auction.ResultRequest\x1a\x17.auction.ResultResponse2\xdf\x01\n" +
+	"\x06Result\x12\x16.auction.ResultRequest\x1a\x17.auction.ResultResponse2\x9b\x01\n" +
 	"\bNodeSync\x12B\n" +
-	"\tHeartbeat\x12\x19.auction.HeartbeatRequest\x1a\x1a.auction.HeartbeatResponse\x12B\n" +
 	"\tSyncState\x12\x19.auction.SyncStateRequest\x1a\x1a.auction.SyncStateResponse\x12K\n" +
 	"\fReplicateBid\x12\x1c.auction.ReplicateBidRequest\x1a\x1d.auction.ReplicateBidResponseB\x0fZ\rauction/protob\x06proto3"
 
@@ -677,39 +566,35 @@ func file_proto_auction_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_auction_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_auction_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_auction_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_auction_proto_goTypes = []any{
 	(BidResponse_Outcome)(0),     // 0: auction.BidResponse.Outcome
 	(*BidRequest)(nil),           // 1: auction.BidRequest
 	(*BidResponse)(nil),          // 2: auction.BidResponse
 	(*ResultRequest)(nil),        // 3: auction.ResultRequest
 	(*ResultResponse)(nil),       // 4: auction.ResultResponse
-	(*HeartbeatRequest)(nil),     // 5: auction.HeartbeatRequest
-	(*HeartbeatResponse)(nil),    // 6: auction.HeartbeatResponse
-	(*SyncStateRequest)(nil),     // 7: auction.SyncStateRequest
-	(*SyncStateResponse)(nil),    // 8: auction.SyncStateResponse
-	(*ReplicateBidRequest)(nil),  // 9: auction.ReplicateBidRequest
-	(*ReplicateBidResponse)(nil), // 10: auction.ReplicateBidResponse
-	nil,                          // 11: auction.SyncStateResponse.BidsEntry
+	(*SyncStateRequest)(nil),     // 5: auction.SyncStateRequest
+	(*SyncStateResponse)(nil),    // 6: auction.SyncStateResponse
+	(*ReplicateBidRequest)(nil),  // 7: auction.ReplicateBidRequest
+	(*ReplicateBidResponse)(nil), // 8: auction.ReplicateBidResponse
+	nil,                          // 9: auction.SyncStateResponse.BidsEntry
 }
 var file_proto_auction_proto_depIdxs = []int32{
-	0,  // 0: auction.BidResponse.outcome:type_name -> auction.BidResponse.Outcome
-	11, // 1: auction.SyncStateResponse.bids:type_name -> auction.SyncStateResponse.BidsEntry
-	1,  // 2: auction.Auction.Bid:input_type -> auction.BidRequest
-	3,  // 3: auction.Auction.Result:input_type -> auction.ResultRequest
-	5,  // 4: auction.NodeSync.Heartbeat:input_type -> auction.HeartbeatRequest
-	7,  // 5: auction.NodeSync.SyncState:input_type -> auction.SyncStateRequest
-	9,  // 6: auction.NodeSync.ReplicateBid:input_type -> auction.ReplicateBidRequest
-	2,  // 7: auction.Auction.Bid:output_type -> auction.BidResponse
-	4,  // 8: auction.Auction.Result:output_type -> auction.ResultResponse
-	6,  // 9: auction.NodeSync.Heartbeat:output_type -> auction.HeartbeatResponse
-	8,  // 10: auction.NodeSync.SyncState:output_type -> auction.SyncStateResponse
-	10, // 11: auction.NodeSync.ReplicateBid:output_type -> auction.ReplicateBidResponse
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	0, // 0: auction.BidResponse.outcome:type_name -> auction.BidResponse.Outcome
+	9, // 1: auction.SyncStateResponse.bids:type_name -> auction.SyncStateResponse.BidsEntry
+	1, // 2: auction.Auction.Bid:input_type -> auction.BidRequest
+	3, // 3: auction.Auction.Result:input_type -> auction.ResultRequest
+	5, // 4: auction.NodeSync.SyncState:input_type -> auction.SyncStateRequest
+	7, // 5: auction.NodeSync.ReplicateBid:input_type -> auction.ReplicateBidRequest
+	2, // 6: auction.Auction.Bid:output_type -> auction.BidResponse
+	4, // 7: auction.Auction.Result:output_type -> auction.ResultResponse
+	6, // 8: auction.NodeSync.SyncState:output_type -> auction.SyncStateResponse
+	8, // 9: auction.NodeSync.ReplicateBid:output_type -> auction.ReplicateBidResponse
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_auction_proto_init() }
@@ -723,7 +608,7 @@ func file_proto_auction_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_auction_proto_rawDesc), len(file_proto_auction_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   11,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   2,
 		},

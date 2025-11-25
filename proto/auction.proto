@@ -12,7 +12,6 @@ service Auction {
 
 // Node-to-Node Internal API for replication
 service NodeSync {
-  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
   rpc SyncState(SyncStateRequest) returns (SyncStateResponse);
   rpc ReplicateBid(ReplicateBidRequest) returns (ReplicateBidResponse);
 }
@@ -43,16 +42,6 @@ message ResultResponse {
 }
 
 // Internal node-to-node messages
-message HeartbeatRequest {
-  int32 node_id = 1;
-  int64 timestamp = 2;
-}
-
-message HeartbeatResponse {
-  bool is_leader = 1;
-  int32 leader_id = 2;
-}
-
 message SyncStateRequest {
   int32 node_id = 1;
 }

@@ -163,7 +163,6 @@ var Auction_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	NodeSync_Heartbeat_FullMethodName    = "/auction.NodeSync/Heartbeat"
 	NodeSync_SyncState_FullMethodName    = "/auction.NodeSync/SyncState"
 	NodeSync_ReplicateBid_FullMethodName = "/auction.NodeSync/ReplicateBid"
 )
@@ -174,7 +173,6 @@ const (
 //
 // Node-to-Node Internal API for replication
 type NodeSyncClient interface {
-	Heartbeat(ctx context.Context, in *HeartbeatRequest, opts ...grpc.CallOption) (*HeartbeatResponse, error)
 	SyncState(ctx context.Context, in *SyncStateRequest, opts ...grpc.CallOption) (*SyncStateResponse, error)
 	ReplicateBid(ctx context.Context, in *ReplicateBidRequest, opts ...grpc.CallOption) (*ReplicateBidResponse, error)
 }
@@ -185,16 +183,6 @@ type nodeSyncClient struct {
 
 func NewNodeSyncClient(cc grpc.ClientConnInterface) NodeSyncClient {
 	return &nodeSyncClient{cc}
-}
-
-func (c *nodeSyncClient) Heartbeat(ctx context.Context, in *HeartbeatRequest, opts ...grpc.CallOption) (*HeartbeatResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HeartbeatResponse)
-	err := c.cc.Invoke(ctx, NodeSync_Heartbeat_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *nodeSyncClient) SyncState(ctx context.Context, in *SyncStateRequest, opts ...grpc.CallOption) (*SyncStateResponse, error) {
@@ -223,7 +211,6 @@ func (c *nodeSyncClient) ReplicateBid(ctx context.Context, in *ReplicateBidReque
 //
 // Node-to-Node Internal API for replication
 type NodeSyncServer interface {
-	Heartbeat(context.Context, *HeartbeatRequest) (*HeartbeatResponse, error)
 	SyncState(context.Context, *SyncStateRequest) (*SyncStateResponse, error)
 	ReplicateBid(context.Context, *ReplicateBidRequest) (*ReplicateBidResponse, error)
 	mustEmbedUnimplementedNodeSyncServer()
@@ -236,9 +223,6 @@ type NodeSyncServer interface {
 // pointer dereference when methods are called.
 type UnimplementedNodeSyncServer struct{}
 
-func (UnimplementedNodeSyncServer) Heartbeat(context.Context, *HeartbeatRequest) (*HeartbeatResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Heartbeat not implemented")
-}
 func (UnimplementedNodeSyncServer) SyncState(context.Context, *SyncStateRequest) (*SyncStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncState not implemented")
 }
@@ -264,24 +248,6 @@ func RegisterNodeSyncServer(s grpc.ServiceRegistrar, srv NodeSyncServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&NodeSync_ServiceDesc, srv)
-}
-
-func _NodeSync_Heartbeat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HeartbeatRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NodeSyncServer).Heartbeat(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: NodeSync_Heartbeat_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NodeSyncServer).Heartbeat(ctx, req.(*HeartbeatRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _NodeSync_SyncState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -327,10 +293,6 @@ var NodeSync_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "auction.NodeSync",
 	HandlerType: (*NodeSyncServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Heartbeat",
-			Handler:    _NodeSync_Heartbeat_Handler,
-		},
 		{
 			MethodName: "SyncState",
 			Handler:    _NodeSync_SyncState_Handler,

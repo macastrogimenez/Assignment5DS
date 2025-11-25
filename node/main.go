@@ -342,7 +342,7 @@ func main() {
 	// Start background tasks
 	go node.connectToPeers()
 	time.Sleep(2 * time.Second) // Give peers time to start
-	go node.leaderElection()
+	//go node.leaderElection()
 	go node.checkAuctionTimeout()
 
 	if err := grpcServer.Serve(lis); err != nil {

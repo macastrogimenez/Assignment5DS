@@ -109,13 +109,13 @@ The client provides an interactive command-line interface:
 
 ```bash
 > bid alice 100
-✓ Success: Bid accepted: 100
+Success: Bid accepted: 100
 
 > bid bob 150
-✓ Success: Bid accepted: 150
+Success: Bid accepted: 150
 
 > bid alice 120
-✗ Fail: Bid must be higher than your previous bid of 150
+Fail: Bid must be higher than your previous bid of 150
 
 > result
 === AUCTION ONGOING ===

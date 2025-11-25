@@ -34,18 +34,29 @@ func NewClient(nodes []string) (*Client, error) {
 
 	// Connect to all nodes
 	for i, node := range nodes {
-		conn, err := grpc.Dial(node,
-			grpc.WithTransportCredentials(insecure.NewCredentials()),
-			grpc.WithBlock(),
-			grpc.WithTimeout(5*time.Second))
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		conn, err := grpc.NewClient(node,
+			grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 		if err != nil {
+			cancel()
+			log.Printf("Warning: Failed to create client for node %s: %v", node, err)
+			continue
+		}
+
+		// Test the connection
+		auctionClient := pb.NewAuctionClient(conn)
+		_, err = auctionClient.Result(ctx, &pb.ResultRequest{})
+		cancel()
+
+		if err != nil {
+			conn.Close()
 			log.Printf("Warning: Failed to connect to node %s: %v", node, err)
 			continue
 		}
 
 		client.connections = append(client.connections, conn)
-		client.clients = append(client.clients, pb.NewAuctionClient(conn))
+		client.clients = append(client.clients, auctionClient)
 		log.Printf("Connected to node %d: %s", i+1, node)
 	}
 
@@ -155,7 +166,7 @@ func (c *Client) InteractiveMode() {
 	fmt.Println("  bid <bidder_id> <amount>  - Place a bid")
 	fmt.Println("  result                     - Query auction result")
 	fmt.Println("  quit                       - Exit")
-	fmt.Println("==========================================\n")
+	fmt.Println("==========================================")
 
 	for {
 		fmt.Print("> ")

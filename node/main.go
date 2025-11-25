@@ -17,9 +17,7 @@ import (
 )
 
 const (
-	AUCTION_DURATION   = 100 * time.Second
-	HEARTBEAT_INTERVAL = 2 * time.Second
-	LEADER_TIMEOUT     = 5 * time.Second
+	AUCTION_DURATION = 100 * time.Second
 )
 
 type Node struct {
@@ -39,11 +37,6 @@ type Node struct {
 	startTime     time.Time
 	auctionOver   bool
 
-	// Replication state
-	isLeader      bool
-	leaderID      int32
-	lastHeartbeat time.Time
-
 	// gRPC connections to peers
 	peerConns map[string]pb.NodeSyncClient
 }
@@ -58,9 +51,6 @@ func NewNode(id int32, port string, peers []string) *Node {
 		highestBidder: "",
 		startTime:     time.Now(),
 		auctionOver:   false,
-		isLeader:      false,
-		leaderID:      -1,
-		lastHeartbeat: time.Now(),
 		peerConns:     make(map[string]pb.NodeSyncClient),
 	}
 }
@@ -149,19 +139,6 @@ func (n *Node) Result(ctx context.Context, req *pb.ResultRequest) (*pb.ResultRes
 	}, nil
 }
 
-// Heartbeat handles heartbeat messages from peers
-func (n *Node) Heartbeat(ctx context.Context, req *pb.HeartbeatRequest) (*pb.HeartbeatResponse, error) {
-	n.mu.Lock()
-	defer n.mu.Unlock()
-
-	n.lastHeartbeat = time.Now()
-
-	return &pb.HeartbeatResponse{
-		IsLeader: n.isLeader,
-		LeaderId: n.leaderID,
-	}, nil
-}
-
 // SyncState allows a node to sync state from another node
 func (n *Node) SyncState(ctx context.Context, req *pb.SyncStateRequest) (*pb.SyncStateResponse, error) {
 	n.mu.RLock()
@@ -225,12 +202,25 @@ func (n *Node) connectToPeers() {
 		go func(peerAddr string) {
 			// Retry connection with backoff
 			for i := 0; i < 10; i++ {
-				conn, err := grpc.Dial(peerAddr,
-					grpc.WithTransportCredentials(insecure.NewCredentials()),
-					grpc.WithBlock(),
-					grpc.WithTimeout(2*time.Second))
+				ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+				conn, err := grpc.NewClient(peerAddr,
+					grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 				if err != nil {
+					cancel()
+					log.Printf("[Node %d] Failed to create client for peer %s (attempt %d): %v",
+						n.id, peerAddr, i+1, err)
+					time.Sleep(time.Duration(i+1) * time.Second)
+					continue
+				}
+
+				// Test the connection
+				syncClient := pb.NewNodeSyncClient(conn)
+				_, err = syncClient.SyncState(ctx, &pb.SyncStateRequest{NodeId: n.id})
+				cancel()
+
+				if err != nil {
+					conn.Close()
 					log.Printf("[Node %d] Failed to connect to peer %s (attempt %d): %v",
 						n.id, peerAddr, i+1, err)
 					time.Sleep(time.Duration(i+1) * time.Second)
@@ -246,53 +236,6 @@ func (n *Node) connectToPeers() {
 				return
 			}
 		}(peer)
-	}
-}
-
-// leaderElection performs simple leader election based on node ID
-func (n *Node) leaderElection() {
-	ticker := time.NewTicker(HEARTBEAT_INTERVAL)
-	defer ticker.Stop()
-
-	// Simple election: lowest ID becomes leader
-	n.mu.Lock()
-	n.leaderID = n.id
-	n.isLeader = true
-	// In this implementation, all nodes can accept writes (multi-master)
-	// Leader election framework is here for potential future use
-	n.mu.Unlock()
-
-	log.Printf("[Node %d] Initial leader election: I am %s", n.id,
-		map[bool]string{true: "LEADER", false: "FOLLOWER"}[n.isLeader])
-
-	for range ticker.C {
-		n.sendHeartbeats()
-	}
-}
-
-// sendHeartbeats sends heartbeat to all peers
-func (n *Node) sendHeartbeats() {
-	n.mu.RLock()
-	conns := make(map[string]pb.NodeSyncClient)
-	for k, v := range n.peerConns {
-		conns[k] = v
-	}
-	n.mu.RUnlock()
-
-	for peerAddr, client := range conns {
-		go func(addr string, c pb.NodeSyncClient) {
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-			defer cancel()
-
-			_, err := c.Heartbeat(ctx, &pb.HeartbeatRequest{
-				NodeId:    n.id,
-				Timestamp: time.Now().Unix(),
-			})
-
-			if err != nil {
-				log.Printf("[Node %d] Heartbeat to %s failed: %v", n.id, addr, err)
-			}
-		}(peerAddr, client)
 	}
 }
 
@@ -342,7 +285,6 @@ func main() {
 	// Start background tasks
 	go node.connectToPeers()
 	time.Sleep(2 * time.Second) // Give peers time to start
-	//go node.leaderElection()
 	go node.checkAuctionTimeout()
 
 	if err := grpcServer.Serve(lis); err != nil {
